@@ -27,8 +27,11 @@ public class CurrencyConversionController {
 		Map<String,String> val = new  HashMap<>();
 		val.put("from", from);
 		val.put("to", to);
+		/*ResponseEntity<CurrencyConversionBean> response = new RestTemplate().getForEntity(
+				"http://localhost:8000/exchange-service/from/{from}/to/{to}",CurrencyConversionBean.class,val);*/
 		ResponseEntity<CurrencyConversionBean> response = new RestTemplate().getForEntity(
-				"http://localhost:8000/exchange-service/from/{from}/to/{to}",CurrencyConversionBean.class,val);
+				"https://currexchange.cfapps.io/exchange-service/from/{from}/to/{to}",CurrencyConversionBean.class,val);
+			
 		CurrencyConversionBean ccBean = response.getBody();
 		
 		return new CurrencyConversionBean(ccBean.getId(), ccBean.getFrom(),ccBean.getTo(),quantity,ccBean.getConversionMultiple(),ccBean.getConversionMultiple().multiply(quantity),0);
