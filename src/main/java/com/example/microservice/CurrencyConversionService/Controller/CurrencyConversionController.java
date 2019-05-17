@@ -13,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.microservice.CurrencyConversionService.Bean.CurrencyConversionBean;
 import com.example.microservice.CurrencyConversionService.service.CurrencyExchangeProxy;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 
 @RestController
 public class CurrencyConversionController {
@@ -29,19 +31,24 @@ public class CurrencyConversionController {
 		val.put("to", to);
 		/*ResponseEntity<CurrencyConversionBean> response = new RestTemplate().getForEntity(
 				"http://localhost:8000/exchange-service/from/{from}/to/{to}",CurrencyConversionBean.class,val);*/
-		ResponseEntity<CurrencyConversionBean> response = new RestTemplate().getForEntity(
+		CurrencyConversionBean ccBean = new RestTemplate().getForObject(
 				"https://currexchange.cfapps.io/exchange-service/from/{from}/to/{to}",CurrencyConversionBean.class,val);
 			
-		CurrencyConversionBean ccBean = response.getBody();
+		//CurrencyConversionBean ccBean = response.getBody();
 		
 		return new CurrencyConversionBean(ccBean.getId(), ccBean.getFrom(),ccBean.getTo(),quantity,ccBean.getConversionMultiple(),ccBean.getConversionMultiple().multiply(quantity),0);
 	}
 	
 	//Feign - To communicate other services in an easiest way
+	@HystrixCommand(fallbackMethod="fallBack")
 	@GetMapping("/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversionBean feignConvert(@PathVariable String from,@PathVariable String to,@PathVariable BigDecimal quantity){
 		
 		CurrencyConversionBean ccBean = proxy.getExchangeValue(from, to);
 		return new CurrencyConversionBean(ccBean.getId(), ccBean.getFrom(),ccBean.getTo(),quantity,ccBean.getConversionMultiple(),ccBean.getConversionMultiple().multiply(quantity),ccBean.getPort());
+	}
+	
+	public CurrencyConversionBean fallBack(String from,String to, BigDecimal quantity) {
+		return new CurrencyConversionBean();
 	}
 }
