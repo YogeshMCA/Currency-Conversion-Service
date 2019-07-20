@@ -1,8 +1,8 @@
 applications:
-- name: CurrConversion
+- name: Curr-Conversion
   instances: 1
   memory: 1G
-  path: target/CurrConversion-0.0.1-SNAPSHOT.jar
-  services:
-  - Service-Registry
+  path: target/Curr-Conversion-0.0.1-SNAPSHOT.jar
+  env:
+    SPRING_PROFILES_ACTIVE: dev
 
