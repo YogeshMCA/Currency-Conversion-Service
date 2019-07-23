@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.microservice.CurrencyConversionService.Bean.CurrencyConversionBean;
 import com.example.microservice.CurrencyConversionService.service.CurrencyExchangeProxy;
+import com.example.microservice.CurrencyConversionService.service.RabbitMQSender;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 
@@ -21,6 +23,9 @@ public class CurrencyConversionController {
 
 	@Autowired
 	private CurrencyExchangeProxy proxy;
+	
+	@Autowired
+	private RabbitMQSender rabbitMQSender;
 	
 	//RestTemplate - To communicate other services
 	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
@@ -50,5 +55,11 @@ public class CurrencyConversionController {
 	
 	public CurrencyConversionBean fallBack(String from,String to, BigDecimal quantity) {
 		return new CurrencyConversionBean();
+	}
+	
+	@GetMapping("/currency-converter-rabbit/{message}")
+	public String aSynchCall(@PathVariable String message){
+		return rabbitMQSender.send(message);
+		
 	}
 }
