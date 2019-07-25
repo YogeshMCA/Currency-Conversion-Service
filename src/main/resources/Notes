@@ -1,0 +1,30 @@
+@LoadBalanced
+Used as a marker annotation indicating that the annotated RestTemplate should use a RibbonLoadBalancerClient for interacting with your service(s).
+
+In turn, this allows you to use "logical identifiers" for the URLs you pass to the RestTemplate. These logical identifiers are typically the name of a service. 
+
+For example:
+
+restTemplate.getForObject("http://some-service-name/user/{id}", String.class, 1);
+where some-service-name is the logical identifier.
+
+@RibbonClient
+Used for configuring your Ribbon client(s).
+
+Is @RibbonClient required?
+
+No! If you're using Service Discovery and you're ok with all of the default Ribbon settings, you don't even need to use the @RibbonClient annotation.
+
+When should I use @RibbonClient?
+
+There are at least two cases where you need to use @RibbonClient
+
+You need to customize your Ribbon settings for a particular Ribbon client
+You're not using any service discovery
+Customizing your Ribbon settings:
+
+Define a @RibbonClient
+
+@RibbonClient(name = "some-service", configuration = SomeServiceConfig.class)
+name - set it to the same name of the service you're calling with Ribbon but need additional customizations for how Ribbon interacts with that service.
+configuration - set it to an @Configuration class with all of your customizations defined as @Beans. Make sure this class is not picked up by @ComponentScan otherwise it will override the defaults for ALL Ribbon clients.
