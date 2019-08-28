@@ -15,7 +15,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableHystrixDashboard
 @EnableDiscoveryClient
 @EnableFeignClients("com.example.microservice.CurrencyConversionService")
-public class CurrencyConversionServiceApplication {
+public class CurrencyConversionServiceApplication{
 
 	public static void main(String[] args) {
 		SpringApplication.run(CurrencyConversionServiceApplication.class, args);

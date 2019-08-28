@@ -5,20 +5,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.microservice.CurrencyConversionService.Bean.CurrencyConversionBean;
+import com.example.microservice.CurrencyConversionService.Bean.UserFeedback;
 import com.example.microservice.CurrencyConversionService.service.CurrencyExchangeProxy;
 import com.example.microservice.CurrencyConversionService.service.RabbitMQSender;
+import com.example.microservice.CurrencyConversionService.service.UserFeedbackServiceInterface;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 
 @RestController
+@CrossOrigin(origins="*",allowedHeaders="*",allowCredentials="true")
 public class CurrencyConversionController {
 
 	@Autowired
@@ -26,6 +28,9 @@ public class CurrencyConversionController {
 	
 	@Autowired
 	private RabbitMQSender rabbitMQSender;
+	
+	@Autowired
+	private UserFeedbackServiceInterface userFeedbackService;
 	
 	//RestTemplate - To communicate other services
 	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
@@ -61,5 +66,11 @@ public class CurrencyConversionController {
 	public String aSynchCall(@PathVariable String message){
 		return rabbitMQSender.send(message);
 		
+	}
+	
+	@GetMapping("/user-feedback/id/{id}")
+	public UserFeedback getUserFeedbackDetails(@PathVariable String id) {
+		return userFeedbackService.getDetails(Long.getLong(id));
+	
 	}
 }
