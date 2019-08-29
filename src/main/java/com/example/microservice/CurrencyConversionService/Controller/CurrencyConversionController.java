@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -69,9 +70,27 @@ public class CurrencyConversionController {
 		
 	}
 	
-	@GetMapping("/user-feedback/id/{id}")
+	@GetMapping("/user-feedback-details/id/{id}")
 	public UserFeedback getUserFeedbackDetails(@PathVariable String id) {
-		return userFeedbackService.getDetails(Long.getLong(id));
+		return userFeedbackService.getDetails(Long.valueOf(id));
+	
+	}
+	
+	@PostMapping("/user-feedback-save")
+	public UserFeedback saveUserFeedbackDetails(@RequestBody UserFeedback userFeedback) {
+		return userFeedbackService.saveUserFeedback(userFeedback);
+	
+	}
+	
+	@PostMapping("/user-feedback-update")
+	public UserFeedback updateUserFeedbackDetails(@RequestBody UserFeedback userFeedback) {
+		return userFeedbackService.saveUserFeedback(userFeedback);
+	
+	}
+	
+	@GetMapping("/user-feedback-delete/id/{id}")
+	public String updateUserFeedbackDetails(@PathVariable String id) {
+		return userFeedbackService.deleteUserFeedback(Long.valueOf(id));
 	
 	}
 }

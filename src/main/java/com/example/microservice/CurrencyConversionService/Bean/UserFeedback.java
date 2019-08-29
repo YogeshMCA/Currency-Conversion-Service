@@ -5,11 +5,11 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
-@Entity(name="USER-FEEDBACK")
+@Entity(name="USER_FEEDBACK")
 public class UserFeedback implements Serializable{
 	
 	@Id
-	private Long Id;
+	private Long ID;
 	
 	@Column(name="USER_NAME")
 	private String uName;
