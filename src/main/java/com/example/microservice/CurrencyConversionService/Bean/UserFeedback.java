@@ -9,6 +9,7 @@ import javax.persistence.*;
 public class UserFeedback implements Serializable{
 	
 	@Id
+	@GeneratedValue
 	private Long ID;
 	
 	@Column(name="USER_NAME")
@@ -17,6 +18,8 @@ public class UserFeedback implements Serializable{
 	private String email;
 	@Column(name="MOBILE_T")
 	private String mobile;
+	@Column(name="FOOD_T")
+	private String food;
 	@Column(name="LIKED_T")
 	private String liked;
 	@Column(name="N_IMPMT_T")
@@ -41,6 +44,19 @@ public class UserFeedback implements Serializable{
 	}
 	public String getMobile() {
 		return mobile;
+	}
+	
+	public Long getID() {
+		return ID;
+	}
+	public void setID(Long iD) {
+		ID = iD;
+	}
+	public String getFood() {
+		return food;
+	}
+	public void setFood(String food) {
+		this.food = food;
 	}
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
