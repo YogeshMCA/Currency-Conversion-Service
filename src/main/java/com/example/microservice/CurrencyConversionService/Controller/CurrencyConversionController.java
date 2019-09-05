@@ -2,14 +2,17 @@ package com.example.microservice.CurrencyConversionService.Controller;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -79,6 +82,18 @@ public class CurrencyConversionController {
 	@PostMapping("/user-feedback-save")
 	public UserFeedback saveUserFeedbackDetails(@RequestBody UserFeedback userFeedback) {
 		return userFeedbackService.saveUserFeedback(userFeedback);
+	
+	}
+	
+	@GetMapping("/user-feedback-details")
+	public List<UserFeedback> getUserFeedbackDetails() {
+		return userFeedbackService.getDetails();
+	
+	}
+	
+	@GetMapping("/user-feedback-details/pagination")
+	public Page<UserFeedback> getUserFeedbackDetails(@RequestParam int page, @RequestParam int size) {
+		return userFeedbackService.getDetailsByPagination(page, size);
 	
 	}
 	
